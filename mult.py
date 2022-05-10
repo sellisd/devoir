@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 import random
-from colorama import Fore, Style, init
+import re
+
+from colorama import Fore
 
 correct = ['Bravo',
            'Magnifique',
@@ -27,18 +29,20 @@ correct = ['Bravo',
            'Bon travail',
            'Bien pensé'
            ]
-wrong = ['Faux',
-         'Mauvaise réponse']
 max_questions = 10
 success_rate = 0
 for i in range(max_questions):
     a = random.randint(2, 10)
     b = random.randint(2, 10)
-    answer = input(f"{a} x {b} = ")
-    if a*b == int(answer):
-        success_rate += 1
-        print(f"{Fore.GREEN}{random.choice(correct)}!{Fore.RESET}")
-    else:
-        print(f"{Fore.RED}{random.choice(wrong)}{Fore.RESET} La bonne réponse est: {a*b}")
-print("FIN")
-print(f"{random.choice(correct)}! {success_rate/max_questions*100} %")
+    answer = 0
+    question_number = 0
+    while a*b != answer:
+        question_number += 1
+        answer = input(f"{question_number}. {a} x {b} = ")
+        if answer == 'q':
+            break
+        if re.match('^\d+$', answer):
+            answer = int(answer)
+        else:
+            print('Entre q pour quitter')
+    print(f"{Fore.GREEN}{random.choice(correct)}!{Fore.RESET}")
