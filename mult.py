@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import random
 import re
-
+import click
 from colorama import Fore
 
 correct = ['Bravo',
@@ -29,20 +29,44 @@ correct = ['Bravo',
            'Bon travail',
            'Bien pensé'
            ]
-max_questions = 10
-success_rate = 0
-for i in range(max_questions):
-    a = random.randint(2, 10)
-    b = random.randint(2, 10)
-    answer = 0
-    question_number = 0
-    while a*b != answer:
-        question_number += 1
+
+
+def ask(question_number, a, b, type) -> bool:
+    if type == 'multiplication':
         answer = input(f"{question_number}. {a} x {b} = ")
-        if answer == 'q':
-            break
-        if re.match('^\d+$', answer):
-            answer = int(answer)
-        else:
-            print('Entre q pour quitter')
-    print(f"{Fore.GREEN}{random.choice(correct)}!{Fore.RESET}")
+        result = a*b
+    elif type == 'addition':
+        answer = input(f"{question_number}. {a} + {b} = ")
+        result = a+b
+    if answer == 'q':
+        exit(0)
+    if re.match('^\d+$', answer):
+        answer = int(answer)
+    else:
+        print('Entré q pour quitter')
+    if result == answer:
+        return True
+    else:
+        return False
+
+
+@click.command()
+@click.option('--max_questions', default=10, help='Number of questions to ask.')
+@click.option('--min', default=2, help='Smallest number.')
+@click.option('--max', default=10, help='Largest number.')
+@click.option('--question-type', type=click.Choice(['multiplication', 'addition'], case_sensitive=False))
+def questions(max_questions, min, max, question_type):
+    i = 1
+    while i <= max_questions:
+        a = random.randint(min, max)
+        b = random.randint(min, max)
+
+        success = False
+        while not success:
+            success = ask(f"{i}/{max_questions}", a, b, question_type)
+        i += 1
+        print(f"{Fore.GREEN}{random.choice(correct)}!{Fore.RESET}")
+
+
+if __name__ == '__main__':
+    questions()
