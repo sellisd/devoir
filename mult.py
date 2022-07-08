@@ -46,7 +46,7 @@ def ask(question_number, a, b, type) -> bool:
         result = a-b
     if answer == 'q':
         exit(0)
-    if re.match('^\d+$', answer):
+    if re.match(r'^\d+$', answer):
         answer = int(answer)
     else:
         print('Entré q pour quitter')
