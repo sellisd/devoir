@@ -54,7 +54,7 @@ def ask(question_number, a, b, type) -> bool:
 @click.option('--max_questions', default=10, help='Number of questions to ask.')
 @click.option('--min', default=2, help='Smallest number.')
 @click.option('--max', default=10, help='Largest number.')
-@click.option('--question-type', type=click.Choice(['multiplication', 'addition'], case_sensitive=False))
+@click.option('--question-type', type=click.Choice(['multiplication', 'addition'], case_sensitive=False), default='addition')
 def questions(max_questions, min, max, question_type):
     i = 1
     while i <= max_questions:
